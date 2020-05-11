@@ -1,7 +1,5 @@
 <?php
 
-// chdir( "nuliga" );
-
 date_default_timezone_set( "Europe/Berlin" );
 
 require_once "credentials.php";
