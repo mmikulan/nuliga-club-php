@@ -1,5 +1,5 @@
 # nuliga-club-php
-Unsere Implementierung für den Zugriff auf die nuPortalRS Spielbetriebdaten.
+Unsere Implementierung der nuPortalRS API in PHP für den Zugriff auf die nuLiga Spielbetriebsdaten. 
 
 ## nuPortalRS API
 https://hbde-portal.liga.nu/rs/documentation/
