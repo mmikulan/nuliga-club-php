@@ -17,6 +17,7 @@ if ( date("m") > 6 ) {
 $result = getResource("/2014/federations/BHV/clubs/". $nuligateamid ."/meetings", $scope, [ "fromDate" => $fromDate, "toDate" => $toDate, "maxResults" => 500 ] );
 
 if ( $data = json_decode( $result, true )) {
+	$fh = fopen( $nuligawebdir ."/spielplan.".  date("ymd") .".csv", "w" );
 	foreach( $data['meetings']['meetingAbbr'] as $m ) {
 		fputs( $fh, date( "d.m.Y H:i", strtotime( $m['scheduled'] )) .";".
 					$m['leagueNickname'] .";".
