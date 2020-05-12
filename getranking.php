@@ -4,7 +4,7 @@ require_once "credentials.php";
 require_once "functions.php";
 require_once "accesstoken.php";
 
-$teams = json_decode( file_get_contents( $nuligadatadir ."/nuliga_teams.json", true ));
+$teams = json_decode( file_get_contents( $nuligawebdir ."/nuliga_teams.json", true ));
 
 foreach ( $teams as $tid => $tdata ) {
 	$jsondata = getResource("/2014/federations/BHV/clubs/". $nuligateamid ."/teams/". $tid ."/table", $scope, array() );
