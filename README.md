@@ -10,13 +10,13 @@ https://www.bhv-online.de/filemanager/BHV/Daten/Service%20und%20Downloads/Nuliga
 ## Dateien
 
 ### credentials.php
-Datei mit den Zugangsdaten des Vereins für das nuPortal
+Datei mit den nuPortal Zugangsdaten des Vereins sowie weitere Konfigurationsdaten
 
 ### functions.php
 Funktionssammlung zur Anmeldung, Token Anfrage, Token Update etc. Mit diesen Funktione wird auch der aktuelle Token in der Datei accesstoken.php abgelegt und genutzt solange er gültig ist
 
 ### getteams.php
-Abfrage aller Mannschaften eines Vereins die in der aktuellen Runde aktiv sind
+Abfrage aller Mannschaften eines Vereins die in der aktuellen Runde aktiv sind 
 
 ### getranking.php
 Abfrage der aktuellen Tabellen aller Ligen der Mannschaften
@@ -26,3 +26,6 @@ Abfrage des aktuellen Spielplans, die Spiele mit Ergebniss der letzten 2 Wochen 
 
 ### getspielplan.php
 Abfrage des kompletten Saison Spielplans aller Teams
+
+### nutest.php
+Testabfrage um zu prüfen ob die Zugangsdaten korrekt sind. Es werden keine Dateien angelegt.
