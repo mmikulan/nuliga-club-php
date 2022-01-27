@@ -14,12 +14,15 @@ if (( time() > mktime( 0,0,0, 6,15,date("Y"))) && ( time() < mktime( 0,0,0,9,15,
 	$toDate   = date( 'Y-m-d', strtotime( "+4 weeks" ));
 }
 
-# echo "$fromDate $toDate\n";
+echo "$fromDate $toDate\n";
 
 $all = array();
 $perteam = array();
+$scheduletoday = array();
 
 $result = getResource("/2014/federations/BHV/clubs/". $nuligateamid ."/meetings", $scope, [ "fromDate" => $fromDate, "toDate" => $toDate, "maxResults" => 100 ] );
+
+print_r( $result );
 
 if ( $data = json_decode( $result, true )) {
 	foreach( $data['meetings']['meetingAbbr'] as $m ) {
@@ -38,6 +41,7 @@ if ( $data = json_decode( $result, true )) {
 			"teamB"  => $m['teamGuest'],
 			"scoreB" => $m['matchesGuest'],
 			"atHome" => $athome,
+			"planned"=> ( $m['originalDate'] == null ) ? true : (( $m['originalDate'] == $m['scheduled'] ) ? false : true ),
 			"done"   => $m['isCompleted'] );
 		if ( ! isset( $perteam[ $tid ] )) { $perteam[ $tid ] = array(); }
 		array_push( $perteam[ $tid ], array( 
@@ -49,13 +53,27 @@ if ( $data = json_decode( $result, true )) {
 			"teamB"  => $m['teamGuest'],
 			"scoreB" => $m['matchesGuest'],
 			"atHome" => $athome,
+			"planned"=> ( $m['originalDate'] == null ) ? true : (( $m['originalDate'] == $m['scheduled'] ) ? false : true ),
 			"done"   => $m['isCompleted'] ));
+		if ( date("dmy") == date( "dmy", strtotime( $m['scheduled'] ))) {
+			array_push( $scheduletoday, array( 
+				"time"   => $m['scheduled'],
+				"liga"   => $m['leagueNickname'],
+				"teamA"  => $m['teamHome'],
+				"scoreA" => $m['matchesHome'],
+				"teamB"  => $m['teamGuest'],
+				"scoreB" => $m['matchesGuest'],
+				"atHome" => $athome,
+				"id"     => $m['meetingId'],
+				"group"  => $m['groupId'],
+				"planned"=> ( $m['originalDate'] == null ) ? true : (( $m['originalDate'] == $m['scheduled'] ) ? false : true ),
+				"done"   => $m['isCompleted'] ));
+		}
 	}
 }
 
-# file_put_contents( "result_schedule3.json", $result );
-
 file_put_contents( $nuligawebdir ."/nuliga_schedule.json", json_encode( $all, JSON_PRETTY_PRINT ) );
 file_put_contents( $nuligawebdir ."/nuliga_schedule_team.json", json_encode( $perteam, JSON_PRETTY_PRINT ) );
+file_put_contents( $nuligawebdir ."/nuliga_schedule_today.json", json_encode( $scheduletoday, JSON_PRETTY_PRINT ) );
 
 ?>
