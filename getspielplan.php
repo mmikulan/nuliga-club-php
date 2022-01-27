@@ -1,5 +1,7 @@
 <?php
 
+// chdir( "nuliga" );
+
 date_default_timezone_set( "Europe/Berlin" );
 
 require_once "credentials.php";
@@ -27,7 +29,7 @@ if ( $data = json_decode( $result, true )) {
 					"\n" );
 	}
 	fclose( $fh );
-	file_put_contents( $nuligawebdir ."/spielplan.json", json_encode( $data['meetings']['meetingAbbr'] ));
+	file_put_contents( $nuligawebdir ."/nuliga_spielplan.json", json_encode( $data['meetings']['meetingAbbr'] ));
 	
 } else {
 	echo "Keine Termine gefunden";
