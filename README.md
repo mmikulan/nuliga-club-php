@@ -1,6 +1,8 @@
 # nuliga-club-php
 Unsere Implementierung der nuPortalRS API in PHP für den Zugriff auf die nuLiga Spielbetriebsdaten mit der wir die aktuellen Spiel sowie Tabellenstände auf die Webseite des TSV Schleißheims einbauen (siehe https://schleissheim-handball.de/mannschaften/1-damen/)
 
+Die Skripte sollten auf einem Server in einem Verzeichnis installiert sein und über einen Cron Service jede Stunde aufgerufen werden. Dazu einfach das Skript nuliga-cronjob.php per Cron aufrufen. Dieses Skript ruft dann entsprechend die anderen Skript auf um die Daten von nuLiga zu laden und in strukturierter Form als JSON Datei der Anzeige auf der eigenen Vereins-Homepage zur Verfügung zu stellen. Wichtig ist das mindestens einmal pro Saison das Skript getteams.php aufgerufen wird um alle an der Saison teilnehmenden Teams zu finden (im Cronjob Skript wird das aktuell jeden Monat gemacht). Wie oft man die aktuellen Spielpläne, Ergebnisse oder Tabellen lädt, kann auch im Cronjob Skript geändert werden. Es sollte aber darau geachtet werden, dass die nuLiga Server nicht überlastet werden. Die vorhandene Cronjob Skript Version macht zB. die Tabellenupdates nur am Wochenende, die Spielplanupdates nur 3x am Tag.
+
 ## nuPortalRS API
 https://hbde-portal.liga.nu/rs/documentation/
 
