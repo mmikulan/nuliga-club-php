@@ -32,11 +32,11 @@ Testabfrage um zu prüfen ob die Zugangsdaten korrekt sind. Es werden keine Date
 
 ### Konfiguration
 Die nötigen Anpassungen begrenzen sich auf die Datei credentials.php
-#### clientid - Die Nutzerkennung welche vom Verband bzw. nuLiga vergeben werden
-#### clientsecret - Das Passwort für den Zugang (kommt auch vom Verband bzw. nuLiga)
-#### scope - muss aktuell auf "club" gesetzt sein
-#### nuligateamid - Id des Vereins (nicht die club Nr in den nuLiga Abfragen, sondern die Id welche auf der nuLiga Seite des Vereins unter V.Nr. steht)
-#### nuligawebdir - das Verzeichnis wo die Resultat Dateien relativ zur Skriptausführung abgespeichert werden. 
+- **clientid** - Die Nutzerkennung welche vom Verband bzw. nuLiga vergeben werden
+- **clientsecret** - Das Passwort für den Zugang (kommt auch vom Verband bzw. nuLiga)
+- **scope** - muss aktuell auf "club" gesetzt sein
+- **nuligateamid** - Id des Vereins (nicht die club Nr in den nuLiga Abfragen, sondern die Id welche auf der nuLiga Seite des Vereins unter V.Nr. steht)
+- **nuligawebdir** - das Verzeichnis wo die Resultat Dateien relativ zur Skriptausführung abgespeichert werden. 
 In dem nuligawebdir Verzeichnis und dem eigentlichen Skriptverzeichen werden Schreibrechte benötigt.
 
 ## Viel Spass bei der Nutzung ...
