@@ -1,8 +1,6 @@
 <?php
 #########################################################################################
 
-$debug = 0;
-
 function  getResource( $resPath, $scope, $parms ) {
 	global $clientid;
 	global $clientsecret;
@@ -17,7 +15,10 @@ function  getResource( $resPath, $scope, $parms ) {
 	$httpcode = 0;
 	$refresh  = 0;
 	$ch = curl_init();
-	# curl_setopt($ch, CURLOPT_VERBOSE, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,1);
+	curl_setopt($ch, CURLOPT_CAINFO,'nuliga-cabundle.crt');
+	curl_setopt($ch, CURLOPT_CAPATH,'nuliga-cabundle.crt');
 	
 	if ( ! empty( $parms )) {
 		$url .= "?". http_build_query( $parms );
@@ -28,13 +29,6 @@ function  getResource( $resPath, $scope, $parms ) {
 		'Authorization: Bearer ' . $access_token,
 		'Accept: application/json'
 	));      
-	// if ( 0 &&  empty( $parms )) {
-		// curl_setopt($ch, CURLOPT_POST, true );
-		// # curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $parms ));
-		// curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query( $parms ));
-		// echo "adding parms: ". json_encode( $parms ) ."\n";
-		// echo "adding parms: ". http_build_query( $parms ) ."\n";
-	// }	
 	$result = curl_exec($ch);
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	if ( $httpCode == 200 ) {
@@ -85,7 +79,6 @@ function  authentificationRefresh( $scope ) {
 		"client_secret" => $clientsecret,
 		"scope" 	=> "nuPortalRS_". $scope
 	);
-	# print_r( $data );
 	$rc = sendOAuth( $data );
 	if ( $rc == 200 ) { return( $rc ); }
 	
@@ -111,7 +104,6 @@ function  authenticationRequest( $scope ) {
 		"client_secret" => $clientsecret,
 		"scope" 	=> "nuPortalRS_". $scope
 	);
-	# print_r( $data );
 	return( sendOAuth( $data ));
 }
 
@@ -134,42 +126,35 @@ function sendOAuth( $data ) {
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true );
+        
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,1);
+        curl_setopt($ch, CURLOPT_CAINFO,'nuliga-cabundle.crt');
+        curl_setopt($ch, CURLOPT_CAPATH,'nuliga-cabundle.crt');
+	
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 		'Cache-control: no-cache',
 		'Content-Type: application/x-www-form-urlencoded'
 	));   
 	curl_setopt($ch, CURLOPT_POST, count($data) );
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata );
-    # echo json_encode( $data );	
-	# curl_setopt($ch, CURLOPT_POST, true );
-	# curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $data ));
-	# curl_setopt($ch, CURLOPT_VERBOSE, true);
-	# curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-	# curl_setopt($ch, CURLOPT_STDERR, $verbose = fopen('php://temp', 'rw+'));
-	# curl_setopt($ch, CURLOPT_FILETIME, true );
 	
 	$result = curl_exec($ch);
 	$headerSent = curl_getinfo($ch, CURLINFO_HEADER_OUT );
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	
-	# echo "Request info: \n", !rewind($verbose), stream_get_contents($verbose), "\n";
 	curl_close($ch);
-	
-	# echo "HTTP code: $httpCode\nHTTP header: $headerSent\n\n";
 	
 	if ( $httpCode == 200 ) {
 		if (( $jsonresult = json_decode( $result, true )) != null ) { 
 			if ( isset( $jsonresult['error'] )) { 
-				# echo "  Error: ". $jsonresult['error'] ."\n". $jsonresult['error_description'] ."\n";
 				return( $httpCode );
 			}
 			if ( isset( $jsonresult['access_token'] )) { 
-				# var_dump( $jsonresult );
 				$access_token  = $jsonresult['access_token'];
 				$refresh_token = $jsonresult['refresh_token'];
 				$filecontent = "<?php\n\$access_token=\"$access_token\";\n\$refresh_token=\"$refresh_token\";\n\$lastupdate='". date("d.m.Y H:i:s") ."';\n?>\n";
 				file_put_contents( "accesstoken.php", $filecontent );
-				# echo "access_token=$access_token\nrefresh_token=$refresh_token\n";
 				return( $httpCode );
 
 			} else {
