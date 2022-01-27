@@ -1,19 +1,22 @@
 <?php
 
+# unterstützt aktuell nur maximal 2 Teams pro Altersklasse also zB. mC1 und mC2, aber keine mC3
+
 require_once "functions.php";
 require_once "credentials.php";
 require_once "accesstoken.php";
 
-# authentificationRequest();
 authentificationRefresh( $scope );
 
 $jsondata = getResource("/2014/federations/BHV/clubs/". $nuligateamid ."/teams", $scope, array() );
 
 $data = json_decode( $jsondata, true );
+echo "nuliga id = ". $nuligateamid ."\n";
+
 
 $mapping = array();
 
-if ( date( "m" ) >= 8 ) { $nuligaseason = date("Y") ."/". sprintf( "%02d", date("y")+1 ); }
+if ( date( "m" ) >= 7 ) { $nuligaseason =  date("Y") ."/". sprintf( "%02d", date("y")+1 ); }
 else 					{ $nuligaseason = (date("Y")-1) ."/". date("y"); }
 
 echo $nuligaseason;
@@ -26,7 +29,6 @@ foreach ( $data['teamSeason'] as $season ) {
 			foreach ( $champ['team'] as $team ) {
 				
 				$rr = ( strpos( $team['group'], "Rück" ) > 0 ) || ( strpos( $team['group'], "RR " ) > 0 );
-				// if ( $rr ) { echo "TRUE\n"; } else { echo "FALSE\n"; }
 
 				if (( ! isset( $entry[ $team['teamId'] ] )) || $rr ) {
 					$entry[ $team['teamId'] ] = array( 
@@ -70,7 +72,6 @@ foreach ( $data['teamSeason'] as $season ) {
 		}
 	}
 }
-// print_r( $entry );
 file_put_contents( $nuligawebdir ."/nuliga_teams.json", json_encode( $entry, JSON_PRETTY_PRINT));
 file_put_contents( $nuligawebdir ."/nuliga_mapping.json", json_encode( $mapping, JSON_PRETTY_PRINT));
 exit;
