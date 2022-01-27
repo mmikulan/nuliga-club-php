@@ -14,6 +14,12 @@ foreach ( $teams as $tid => $tdata ) {
 
 	foreach( $data['groupTable'] as $grp ) {
 		
+		$found = false;
+		foreach ( $grp['groupTableTeam'] as $gteam ) {
+			if ( $gteam['teamId'] == $tid ) { $found = true; break; }
+		}
+		if ( ! $found ) { continue; }
+		
 		$rr = (strpos( $grp['group'], "Rückrunde" ) > 0) || (strpos( $grp['group'], "RR ") > 0);
 		if ( isset( $output[ $tid ]['liga'] ) && ( ! $rr )) { continue; }
 		
@@ -28,13 +34,6 @@ foreach ( $teams as $tid => $tdata ) {
 				"ptsB" 	 => $gteam['otherPoints'],
 				"goalsA" => $gteam['ownMatches'],
 				"goalsB" => $gteam['otherMatches'] );
-			// echo $gteam['otherPoints']
-			// echo $gteam['tableRank'] ." ";
-			// echo $gteam['team'] ." ";
-			// echo $gteam['ownPoints'] .":";
-			// echo $gteam['otherPoints'] ." ";
-			// echo $gteam['ownSets'] .":";
-			// echo $gteam['otherSets'] ." \n";
 		}
 	}
 }
